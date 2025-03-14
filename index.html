@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalendarz, Zegar i Losowe Imię</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        .container {
+            width: 60%;
+            margin: auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fafafa;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        #clock {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px;
+            color: #ff5722;
+        }
+        #randomName {
+            font-style: italic;
+            margin: 20px;
+            color: #2196F3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        td:hover {
+            background-color: #f1f1f1;
+        }
+        button {
+            background-color: #ff5722;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #e64a19;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kalendarz, Zegar i Losowe Imię</h1>
+        
+        <div id="calendar"></div>
+        <div id="clock"></div>
+        <button onclick="showRandomName()">Pokaż losowe imię</button>
+        <p id="randomName"></p>
+    </div>
+
+    <script>
+        function updateClock() {
+            let now = new Date();
+            document.getElementById("clock").innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function showRandomName() {
+            let names = ["Jan", "Anna", "Piotr", "Maria", "Krzysztof", "Agnieszka", "Tomasz", "Katarzyna", "Michał", "Magdalena"];
+            let randomIndex = Math.floor(Math.random() * names.length);
+            document.getElementById("randomName").innerText = names[randomIndex];
+        }
+
+        function printCalendar() {
+            let now = new Date();
+            let rok = now.getFullYear();
+            let miesiac = now.getMonth();
+            let dzienMiesiaca = now.getDate();
+            let pierwszyDzienMiesiaca = new Date(rok, miesiac, 1).getDay() || 7;
+            let dniWMiesiacu = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][miesiac];
+
+            let calendarHTML = `<h2>${["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"][miesiac]} ${rok}</h2>`;
+            calendarHTML += "<table><tr>";
+
+            ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"].forEach(dzien => {
+                calendarHTML += `<th>${dzien}</th>`;
+            });
+
+            calendarHTML += "</tr><tr>";
+
+            for (let i = 1; i < pierwszyDzienMiesiaca; i++) {
+                calendarHTML += "<td></td>";
+            }
+
+            for (let i = 1; i <= dniWMiesiacu; i++) {
+                if ((pierwszyDzienMiesiaca + i - 2) % 7 === 0) calendarHTML += "</tr><tr>";
+                calendarHTML += `<td>${i}</td>`;
+            }
+
+            calendarHTML += "</tr></table>";
+            document.getElementById("calendar").innerHTML = calendarHTML;
+        }
+        printCalendar();
+    </script>
+</body>
+</html>
